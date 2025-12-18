@@ -1,107 +1,17 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:intl/intl.dart';
-
-// This imported file was generated in two steps, using the Dart intl tools. With the
-// app's root directory (the one that contains pubspec.yaml) as the current
-// directory:
-//
-// flutter pub get
-// flutter pub pub run intl_translation:extract_to_arb --output-dir=lib/l10n lib/main.dart
-// flutter pub pub run intl_translation:generate_from_arb --output-dir=lib/l10n --no-use-deferred-loading lib/main.dart lib/l10n/intl_*.arb
-//
-// The second command generates intl_messages.arb and the third generates
-// messages_all.dart. There's more about this process in
-// https://pub.dartlang.org/packages/intl.
-import 'l10n/messages_all.dart';
-
-// For tips on internationalization see:
-// https://phraseapp.com/blog/posts/how-to-internationalize-a-flutter-app
-
-class ExampleLocalizations {
-  static Future<ExampleLocalizations> load(Locale locale) {
-    final String name = locale.countryCode == null || locale.countryCode.isEmpty
-        ? locale.languageCode
-        : locale.toString();
-    final String localeName = Intl.canonicalizedLocale(name);
-
-    return initializeMessages(localeName).then((_) {
-      Intl.defaultLocale = localeName;
-      return ExampleLocalizations();
-    });
-  }
-
-  static ExampleLocalizations of(BuildContext context) {
-    return Localizations.of<ExampleLocalizations>(
-        context, ExampleLocalizations);
-  }
-
-  String get title {
-    return Intl.message(
-      'Screenshots Example',
-      name: 'title',
-      desc: 'Title for the Example application',
-    );
-  }
-
-  String get counterText {
-    return Intl.message(
-      'You have pushed the button this many times:',
-      name: 'counterText',
-      desc: 'Explanation for incrementing counter',
-    );
-  }
-
-  String get counterIncrementButtonTooltip {
-    return Intl.message(
-      'Increment',
-      name: 'counterIncrementButtonTooltip',
-      desc: 'Tooltip for counter increment button',
-    );
-  }
-}
-
-class ExampleLocalizationsDelegate
-    extends LocalizationsDelegate<ExampleLocalizations> {
-  const ExampleLocalizationsDelegate();
-
-  @override
-  bool isSupported(Locale locale) => ['en', 'fr'].contains(locale.languageCode);
-
-  @override
-  Future<ExampleLocalizations> load(Locale locale) =>
-      ExampleLocalizations.load(locale);
-
-  @override
-  bool shouldReload(ExampleLocalizationsDelegate old) => false;
-}
-
-class DemoApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(ExampleLocalizations.of(context).title),
-      ),
-      body: Center(
-        child: Text(ExampleLocalizations.of(context).title),
-      ),
-    );
-  }
-}
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      onGenerateTitle: (context) => ExampleLocalizations.of(context).title,
+      title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -114,30 +24,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
-      localizationsDelegates: [
-        // ... app-specific localization delegate[s] here
-        const ExampleLocalizationsDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('en'), // English
-        const Locale('fr'), // French
-//        const Locale('en', 'US'), // American English
-//        const Locale('fr', 'CA'), // Canadian French
-        // ... other locales the app supports
-      ],
-      // some android emulators on some machines may require the following:
-      // see: https://github.com/flutter/flutter/issues/25325
-//      locale: const Locale('en', ''),
-//      localeResolutionCallback: (x, y) => const Locale('en', ''),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -148,10 +41,10 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-//  final String title;
+  final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -180,13 +73,13 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(ExampleLocalizations.of(context).title),
+        title: Text(widget.title),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-          // Column is also layout widget. It takes a list of children and
+          // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
           // children horizontally, and tries to be as tall as its parent.
           //
@@ -202,20 +95,20 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              ExampleLocalizations.of(context).counterText,
+            const Text(
+              'You have pushed the button this many times:',
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
-        tooltip: ExampleLocalizations.of(context).counterIncrementButtonTooltip,
-        child: Icon(Icons.add),
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
